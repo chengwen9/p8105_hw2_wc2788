@@ -11,19 +11,28 @@ library(tidyverse)
 ```
 
 ## Problem 1
-import data trash wheel collection 
+import data trash wheel collection, specify the sheet and omit non-data entries.
 ```{r}
 library(readxl)
-Trash_Wheel_Collection = read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx")
+Trash_Wheel_Collection = read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", #import data
+                                    sheet = "Mr. Trash Wheel", #specify the sheet
+                                    skip = 1, #skip the first row contain with graph
+                                    cell_cols("A:N") #keep the column with data and omit non-data column 
+                                )
+Trash_Wheel_Collection
 ```
 clean up names
 ```{r}
 names(Trash_Wheel_Collection)
 Trash_Wheel_Collection = janitor::clean_names(Trash_Wheel_Collection)
 ```
-tibble
+omit rows that do not include dumpster-specific data
+
 ```{r}
-Trash_Wheel_Collection
+#drop_na( )
+mutate(Trash_Wheel_Collection,
+       new_sports_balls = as.integer(round(sports_balls, 0))
+)
 ```
 ## Problem 2
 

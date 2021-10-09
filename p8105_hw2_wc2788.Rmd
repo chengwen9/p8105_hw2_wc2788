@@ -1,0 +1,35 @@
+---
+title: "p8105_hw2_wc2788"
+author: "Wen Cheng"
+date: "10/4/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Problem 1
+import data trash wheel collection 
+```{r}
+library(readxl)
+Trash_Wheel_Collection = read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx")
+```
+clean up names
+```{r}
+names(Trash_Wheel_Collection)
+Trash_Wheel_Collection = janitor::clean_names(Trash_Wheel_Collection)
+```
+tibble
+```{r}
+Trash_Wheel_Collection
+```
+## Problem 2
+
+
+```{r }
+
+```
+
+## Problem 3

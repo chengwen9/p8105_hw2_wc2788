@@ -8,34 +8,67 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(dplyr)
+library(readxl)
 ```
 
 ## Problem 1
 import data trash wheel collection, specify the sheet and omit non-data entries.
 ```{r}
-library(readxl)
-Trash_Wheel_Collection = read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", #import data
+Trash_Wheel = read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", #import data
                                     sheet = "Mr. Trash Wheel", #specify the sheet
                                     skip = 1, #skip the first row contain with graph
                                     cell_cols("A:N") #keep the column with data and omit non-data column 
                                 )
-Trash_Wheel_Collection
+Trash_Wheel
 ```
 clean up names
 ```{r}
-names(Trash_Wheel_Collection)
-Trash_Wheel_Collection = janitor::clean_names(Trash_Wheel_Collection)
+names(Trash_Wheel)
+Trash_Wheel = janitor::clean_names(Trash_Wheel) %>%
+  drop_na(dumpster) %>%
+mutate(sports_balls = as.integer(round(sports_balls,0)))
+Trash_Wheel
 ```
 omit rows that do not include dumpster-specific data
 
 ```{r}
 #drop_na( )
-mutate(Trash_Wheel_Collection,
-       new_sports_balls = as.integer(round(sports_balls, 0))
-)
+#mutate(Trash_Wheel_Collection,
+       #new_sports_balls = as.integer(round(SportsBalls, 0)))
+?as.integer
 ```
-## Problem 2
+Read and clean precipitation data for 2018
+```{r}
+precip_18 = read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", #import data
+                                    sheet = "2018 Precipitation", #specify the sheet
+                                    skip = 1 #omit first row that not contain data
+                               )
+names(precip_18)
+precip_18 = janitor::clean_names(precip_18) %>%
+mutate(year = 2018)  #add year variable
+precip_18
+```
+Read and clean precipitation data for 2019
+```{r}
+precip_19 = read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", #import data
+                                    sheet = "2019 Precipitation", #specify the sheet
+                                    skip = 1 #omit first row that not contain data
+                               )
+names(precip_19)
+precip_19 = janitor::clean_names(precip_19) %>%
+mutate(year = 2019) #add  year variable
+precip_19
+```
+combine precipitation datasets of 2018 and 2019, and convert month to a character variable
+```{r}
+combine_1819 = bind_rows(precip_18, precip_19) %>% #combine 2018 and 2019 dataset
+mutate(month = month.name[month]) #convert month to character variable
+combine_1819
+```
+Write a paragraph about these data; you are encouraged to use inline R. Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2018? What was the median number of sports balls in a dumpster in 2019?
 
+## Problem 2
 
 ```{r }
 
